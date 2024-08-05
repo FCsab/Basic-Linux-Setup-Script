@@ -315,6 +315,39 @@ function install_shotcut(){
     fi
 }
 
+function install_neofetch(){
+    if [[ "$system" == "Fedora" ]]; then
+        if ! sudo dnf install neofetch -y
+            then
+                echo "Error during installing Neofetch."
+                return 1
+        fi
+        echo "Neofetch installation successful!"
+    fi
+}
+
+function install_openrgb(){
+    if [[ "$system" == "Fedora" ]]; then
+        if ! sudo dnf install openrgb -y
+            then
+                echo "Error during installing OpenRGB."
+                return 1
+        fi
+        echo "OpenRGB installation successful!"
+    fi
+}
+
+function install_mangohud(){
+    if [[ "$system" == "Fedora" ]]; then
+        if ! sudo dnf install mangohud -y
+            then
+                echo "Error during installing MangoHud."
+                return 1
+        fi
+        echo "MangoHud installation successful!"
+    fi
+}
+
 install_steam
 install_codecs
 install_git
@@ -334,3 +367,7 @@ install_modrinth
 install_retroarch
 install_keepassxc
 install_transmission
+install_shotcut
+install_neofetch
+install_openrgb
+install_mangohud

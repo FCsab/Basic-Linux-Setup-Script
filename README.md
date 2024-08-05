@@ -11,13 +11,16 @@
         <li>Fish (also changes the shell)</li>
         <li>VS code</li>
         <li>Rust</li>
-        <li>Adds flatpak repo</li>
         <li>Libre Office</li>
         <li>Obsidian</li>
         <li>Modrinth (minecraft modloader)</li>
         <li>Retro Arch</li>
         <li>KeePassXC</li>
         <li>Transmission</li>
+        <li>Shotcut</li>
+        <li>Neofetch</li>
+        <li>OpenRGB</li>
+        <li>Mangohud</li>
     </ul>
 
 <h2>Requirements</h2>
