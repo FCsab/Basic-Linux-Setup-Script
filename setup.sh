@@ -115,7 +115,7 @@ function install_protonge(){
                     echo "ProtonGe folder creation" >> failed.txt
                     return 1
             fi
-            if ! tar -xf GE-Proton9-11.tar.gz -C ~/.steam/root/compatibilitytools.d/
+            if ! tar -xf ~/Downloads/GE-Proton9-11.tar.gz -C ~/.steam/root/compatibilitytools.d/
                 then
                     echo "ProtonGe extract" >> failed.txt
                     return 1
@@ -376,6 +376,7 @@ function update_system(){
 update_system
 install_steam
 install_codecs
+set_up_flatpaky
 install_git
 enable_bluetooth
 post_install_setup
@@ -386,7 +387,6 @@ install_gimp
 install_fish
 install_vscode
 install_rust
-set_up_flatpak
 install_libre_office
 install_obsidian
 install_modrinth
