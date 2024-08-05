@@ -17,8 +17,7 @@
         <li>Modrinth (minecraft modloader)</li>
         <li>Retro Arch</li>
         <li>KeePassXC</li>
-        <li>Transmission (torrent)</li>
-        
+        <li>Transmission</li>
     </ul>
 
 <h2>Requirements</h2>
