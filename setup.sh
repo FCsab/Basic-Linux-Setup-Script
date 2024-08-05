@@ -47,6 +47,17 @@ then
 fi
 }
 
+function enable_bluetooth(){
+    if [[ "$system" == "Fedora" ]]; then
+        if ! sudo systemctl enable --now bluetooth
+            then
+                echo "Error during starting Bluetooth."
+                return 1
+        fi
+        echo "Bluetooth enabled!"
+    fi
+}
+
 function install_codecs(){
     if [[ "$system" == "Fedora" ]]; then
         if ! sudo dnf swap 'ffmpeg-free' 'ffmpeg' --allowerasing -y
@@ -105,6 +116,21 @@ function install_protonge(){
     fi
 }
 
+function install_git(){
+    if [[ "$system" == "Fedora" ]]; then
+        if ! sudo dnf install git -y
+            then
+                echo "Error during installing Git."
+                return 1
+        fi
+        if ! flatpak install flathub io.github.shiftey.Desktop
+            then
+                echo "Error during installing GitHub Desktop."
+                return 1
+        echo "Git installation successful!"
+    fi
+}
+
 function install_discord(){
     if [[ "$system" == "Fedora" ]]; then
         if ! sudo dnf install https://download1.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$(rpm -E %fedora).noarch.rpm
@@ -123,6 +149,17 @@ function install_discord(){
                 return 1
         fi
         echo "Discord installation successful!"
+    fi
+}
+
+function install_grubcostum(){
+    if [[ "$system" == "Fedora" ]]; then
+        if ! sudo dnf install grub-customizer -y
+            then
+                echo "Error during installing Grub Customizer."
+                return 1
+        fi
+        echo "Grub Customizer installation successful!"
     fi
 }
 
@@ -171,6 +208,17 @@ function install_vscode(){
                 return 1
         fi
         echo "Visual Studio Code installation successful!"
+    fi
+}
+
+function install_rust(){
+    if [[ "$system" == "Fedora" ]]; then
+        if ! sudo dnf install rust -y
+            then
+                echo "Error during installing Rust."
+                return 1
+        fi
+        echo "Rust installation successful!"
     fi
 }
 
@@ -269,15 +317,20 @@ function install_shotcut(){
 
 install_steam
 install_codecs
+install_git
+enable_bluetooth
 post_install_setup
 install_discord
+install_grubcostum
 install_protonge
 install_gimp
 install_fish
 install_vscode
+install_rust
 set_up_flatpak
 install_libre_office
 install_obsidian
 install_modrinth
 install_retroarch
 install_keepassxc
+install_transmission

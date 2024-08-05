@@ -23,6 +23,15 @@
     <li>wget</li>
 </ul>
 
+<br>
+
+<h2>Supported systems:</h2>
+<ul>
+    <li>Only Fedora for now, but im planning on adding Arch and Debian.</li>
+</ul>
+
+<br>
+
 <h2>Usage:</h2>
 <h3>Download setup.sh</h3>
 
