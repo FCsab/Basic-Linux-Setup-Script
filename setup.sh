@@ -376,7 +376,7 @@ function update_system(){
 update_system
 install_steam
 install_codecs
-set_up_flatpaky
+set_up_flatpak
 install_git
 enable_bluetooth
 post_install_setup
@@ -397,8 +397,24 @@ install_shotcut
 install_neofetch
 install_openrgb
 install_mangohud
+update_system
 
 echo "Installation complete!"
 echo "Failed installations:"
 cat failed.txt
 rm failed.txt
+
+echo "Restart computer  to apply changes y/n?"
+read restart
+if [[ "$restart" == "y" ]]; then
+    echo "Restarting computer..."
+    for ((i=5; i>=1; i--)); do
+        echo "Restarting in $i seconds..."
+        sleep 1
+    done
+    echo "Restarting computer..."
+    sudo reboot now
+fi
+if [[ "$restart" == "n" ]]; then
+    echo "Restart your computer after you finish your work."
+fi
