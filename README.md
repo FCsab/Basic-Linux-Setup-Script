@@ -8,7 +8,7 @@
         <li>Grub-Customizer</li>
         <li>Proton-GE 9-11</li>
         <li>Gimp</li>
-        <li>Fish (also changes the shell)</li>
+        <li>Fish (doesnt change the shell)</li>
         <li>VS code</li>
         <li>Rust</li>
         <li>Libre Office</li>

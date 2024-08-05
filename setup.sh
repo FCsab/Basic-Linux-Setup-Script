@@ -47,6 +47,7 @@ then
     sudo cp /etc/dnf/dnf.conf.bak /etc/dnf/dnf.conf
     return 1
 fi
+fi
 }
 
 function enable_bluetooth(){
@@ -99,6 +100,16 @@ function install_protonge(){
                     echo "Installing ProtonGe" >> failed.txt
                     return 1
             fi
+            if ! mkdir ~/.steam
+                then
+                    echo "ProtonGe folder creation" >> failed.txt
+                    return 1
+            fi
+            if ! mkdir ~/.steam/root
+                then
+                    echo "ProtonGe folder creation" >> failed.txt
+                    return 1
+            fi
             if ! mkdir ~/.steam/root/compatibilitytools.d/
                 then
                     echo "ProtonGe folder creation" >> failed.txt
@@ -129,6 +140,7 @@ function install_git(){
                 echo "Installing GitHub Desktop" >> failed.txt
                 return 1
         echo "Git installation successful!"
+    fi
     fi
 }
 
@@ -182,11 +194,6 @@ function install_fish(){
                 echo "Installing Fish" >> failed.txt
                 return 1
         fi
-        if ! chsh -s /usr/bin/fish
-            then
-                echo "Changing shell to Fish" >> failed.txt
-                return 1
-        fi
         echo "Fish installation successful!"
     fi
 }
@@ -194,6 +201,7 @@ function install_fish(){
 function install_vscode(){
     if [[ "$system" == "Fedora" ]]; then
         if ! sudo rpm --import https://packages.microsoft.com/keys/microsoft.asc
+echo -e "[code]\nname=Visual Studio Code\nbaseurl=https://packages.microsoft.com/yumrepos/vscode\nenabled=1\ngpgcheck=1\ngpgkey=https://packages.microsoft.com/keys/microsoft.asc" | sudo tee /etc/yum.repos.d/vscode.repo > /dev/null
             then
                 return 1
                 echo "Importing key for Visual Studio Code" >> failed.txt
@@ -230,7 +238,7 @@ function set_up_flatpak(){
                 echo "Installing Flatpak" >> failed.txt
                 return 1
         fi
-        if ! flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
+        if ! flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
             then
                 echo "Adding Flathub" >> failed.txt
                 return 1
@@ -392,5 +400,5 @@ install_mangohud
 
 echo "Installation complete!"
 echo "Failed installations:"
-echo cat failed.txt
+cat failed.txt
 rm failed.txt
