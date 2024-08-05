@@ -25,14 +25,19 @@
 
 <h2>Usage:</h2>
 <h3>Download setup.sh</h3>
-<h3>```bash
+
+```bash
 wget https://github.com/FCsab/Basic-Linux-Setup-Script/setup.sh
-```</h3>
+```
+
 <h3>Make file executeable</h3>
-<h3>```bash
+
+```bash
 chmod +x setup.sh
-```</h3>
+```
+
 <h3>Run the file as sudo</h3>
-<h3>```bash
+
+```bash
 sudo bash setup.sh
-```</h3>
+```
