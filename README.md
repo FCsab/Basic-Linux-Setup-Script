@@ -5,15 +5,20 @@
         <li>Media codecs</li>
         <li>Steam</li>
         <li>Discord</li>
+        <li>Grub-Customizer</li>
         <li>Proton-GE 9-11</li>
         <li>Gimp</li>
         <li>Fish (also changes the shell)</li>
         <li>VS code</li>
+        <li>Rust</li>
+        <li>Adds flatpak repo</li>
         <li>Libre Office</li>
         <li>Obsidian</li>
         <li>Modrinth (minecraft modloader)</li>
         <li>Retro Arch</li>
         <li>KeePassXC</li>
+        <li>Transmission (torrent)</li>
+        
     </ul>
 
 <h2>Requirements</h2>
