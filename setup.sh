@@ -14,16 +14,19 @@ function install_steam(){
         if ! sudo dnf install -y https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm https://mirrors.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$(rpm -E %fedora).noarch.rpm;
  then
       echo "Error installing RPMFusion repositories."
+      echo "Steam" >> failed.txt
       return 1
     fi
 
     if ! sudo dnf config-manager --set-enabled fedora-cisco-openh264 -y; then
       echo "Error enabling fedora-cisco-openh264 repository."
+      echo "Steam" >> failed.txt
       return 1
     fi
 
     if ! sudo dnf install -y steam; then
       echo "Error installing Steam."
+      echo "Steam" >> failed.txt
       return 1
     fi
     echo "Steam installation successful!"
@@ -43,6 +46,7 @@ max_parallel_downloads=10
 deltarpm=true" > /etc/dnf/dnf.conf
 then
     echo "Error during setting up dnf."
+    echo "DNF config" >> failed.txt
     return 1
 fi
 }
@@ -52,6 +56,7 @@ function enable_bluetooth(){
         if ! sudo systemctl enable --now bluetooth
             then
                 echo "Error during starting Bluetooth."
+                echo "Enabling bluetooth" >> failed.txt
                 return 1
         fi
         echo "Bluetooth enabled!"
@@ -63,26 +68,31 @@ function install_codecs(){
         if ! sudo dnf swap 'ffmpeg-free' 'ffmpeg' --allowerasing -y
             then
                 echo "Error during installing codecs."
+                echo "codecs" >> failed.txt
                 return 1
         fi
         if ! sudo dnf update @multimedia --setopt="install_weak_deps=False" --exclude=PackageKit-gstreamer-plugin -y
             then
                 echo "Error during installing codecs."
+                echo "codecs" >> failed.txt
                 return 1
         fi
         if ! sudo dnf install ffmpeg ffmpeg-libs libva libva-utils -y
             then
                 echo "Error during installing codecs."
+                echo "codecs" >> failed.txt
                 return 1
         fi
         if ! sudo dnf config-manager --set-enabled fedora-cisco-openh264 -y
             then
                 echo "Error during enabling repository."
+                echo "codecs" >> failed.txt
                 return 1
         fi
         if ! sudo dnf install -y openh264 gstreamer1-plugin-openh264 mozilla-openh264 -y
             then
                 echo "Error during installing codecs."
+                echo "codecs" >> failed.txt
                 return 1
         fi
     echo "Codecs installation successful!"
@@ -92,25 +102,28 @@ function install_codecs(){
 function install_protonge(){
     if [[ "$system" == "Fedora" ]]; then
         mkdir ~/.steam/root/compatibilitytools.d
-            cd ~/Downloads
-            if ! wget https://github.com/GloriousEggroll/proton-ge-custom/releases/download/GE-Proton9-11/GE-Proton9-11.tar.gz
+            if ! wget -P ~/Downloads https://github.com/GloriousEggroll/proton-ge-custom/releases/download/GE-Proton9-11/GE-Proton9-11.tar.gz
                 then
                     echo "Error during downloading ProtonGE."
+                    echo "Installing ProtonGe" >> failed.txt
                     return 1
             fi
             if ! mkdir ~/.steam/root/compatibilitytools.d/
                 then
                     echo "Error during creating directory."
+                    echo "ProtonGe folder creation" >> failed.txt
                     return 1
             fi
             if ! tar -xf GE-Proton9-11.tar.gz -C ~/.steam/root/compatibilitytools.d/
                 then
                     echo "Error during unpacking package."
+                    echo "ProtonGe extract" >> failed.txt
                     return 1
             fi
             if ! rm ~/Downloads/GE-Proton9-11.tar.gz
                 then
                     echo "Error during cleaning up."
+                    echo "ProtonGe clean" >> failed.txt
                     return 1
             fi
     fi
@@ -121,11 +134,13 @@ function install_git(){
         if ! sudo dnf install git -y
             then
                 echo "Error during installing Git."
+                echo "Installing git" >> failed.txt
                 return 1
         fi
         if ! flatpak install flathub io.github.shiftey.Desktop
             then
                 echo "Error during installing GitHub Desktop."
+                echo "Installing GitHub Desktop" >> failed.txt
                 return 1
         echo "Git installation successful!"
     fi
@@ -136,16 +151,19 @@ function install_discord(){
         if ! sudo dnf install https://download1.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$(rpm -E %fedora).noarch.rpm
             then
                 echo "Error adding repo."
+                echo "Adding Discord repo" >> failed.txt
                 return 1
         fi
         if ! sudo dnf update -y
             then
                 echo "Error during updating."
+                echo "Updating for Discord" >> failed.txt
                 return 1
         fi
         if ! sudo dnf install discord -y
             then
                 echo "Error during installing Discord."
+                echo "Installing Discord" >> failed.txt
                 return 1
         fi
         echo "Discord installation successful!"
@@ -157,6 +175,7 @@ function install_grubcostum(){
         if ! sudo dnf install grub-customizer -y
             then
                 echo "Error during installing Grub Customizer."
+                echo "Installing Grub Customizer" >> failed.txt
                 return 1
         fi
         echo "Grub Customizer installation successful!"
@@ -168,6 +187,7 @@ function install_gimp(){
         if ! sudo dnf install gimp -y
             then
                 echo "Error during installing GIMP."
+                echo "Installing GIMP" >> failed.txt
                 return 1
         fi
         echo "GIMP installation successful!"
@@ -179,11 +199,13 @@ function install_fish(){
         if ! sudo dnf install fish -y
             then
                 echo "Error during installing Fish."
+                echo "Installing Fish" >> failed.txt
                 return 1
         fi
         if ! chsh -s /usr/bin/fish
             then
                 echo "Error during changing shell."
+                echo "Changing shell to Fish" >> failed.txt
                 return 1
         fi
         echo "Fish installation successful!"
@@ -196,15 +218,18 @@ function install_vscode(){
             then
                 echo "Error during importing key."
                 return 1
+                echo "Importing key for Visual Studio Code" >> failed.txt
         fi
         if ! sudo dnf check-update
             then
                 echo "Error during checking for updates."
+                echo "Checking for updates for Visual Studio Code" >> failed.txt
                 return 1
         fi
         if ! sudo dnf install code -y
             then
                 echo "Error during installing Visual Studio Code."
+                echo "Installing Visual Studio Code" >> failed.txt
                 return 1
         fi
         echo "Visual Studio Code installation successful!"
@@ -216,6 +241,7 @@ function install_rust(){
         if ! sudo dnf install rust -y
             then
                 echo "Error during installing Rust."
+                echo "Installing Rust" >> failed.txt
                 return 1
         fi
         echo "Rust installation successful!"
@@ -227,11 +253,13 @@ function set_up_flatpak(){
         if ! sudo dnf install flatpak -y
             then
                 echo "Error during installing Flatpak."
+                echo "Installing Flatpak" >> failed.txt
                 return 1
         fi
         if ! flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
             then
                 echo "Error during adding Flathub."
+                echo "Adding Flathub" >> failed.txt
                 return 1
         fi
         echo "Flatpak installation successful!"
@@ -243,6 +271,7 @@ function install_libre_office(){
         if ! sudo dnf install libreoffice -y
             then
                 echo "Error during installing Libre Office."
+                echo "Installing Libre Office" >> failed.txt
                 return 1
         fi
         echo "Libre Office installation successful!"
@@ -254,6 +283,7 @@ function install_obsidian(){
         if ! flatpak install flathub md.obsidian.Obsidian -y
             then
                 echo "Error during installing Obsidian."
+                echo "Installing Obsidian" >> failed.txt
                 return 1
         fi
         echo "Obsidian installation successful!"
@@ -265,6 +295,7 @@ function install_modrinth(){
         if ! flatpak install flathub com.modrinth.ModrinthApp -y
             then
                 echo "Error during installing Modrinth."
+                echo "Installing Modrinth" >> failed.txt
                 return 1
         fi
         echo "Modrinth installation successful!"
@@ -276,6 +307,7 @@ function install_retroarch(){
         if ! sudo dnf install retroarch -y
             then
                 echo "Error during installing Retroarch."
+                echo "Installing Retroarch" >> failed.txt
                 return 1
         fi
         echo "Retroarch installation successful!"
@@ -287,6 +319,7 @@ function install_keepassxc(){
         if ! sudo dnf install keepassxc -y
             then
                 echo "Error during installing KeepassXC."
+                echo "Installing KeepassXC" >> failed.txt
                 return 1
         fi
         echo "KeepassXC installation successful!"
@@ -298,6 +331,7 @@ function install_transmission(){
         if ! sudo dnf install transmission -y
             then
                 echo "Error during installing transmission."
+                echo "Installing Transmission" >> failed.txt
                 return 1
         fi
         echo "Transmission installation successful!"
@@ -309,6 +343,7 @@ function install_shotcut(){
         if ! flatpak install flathub org.shotcut.Shotcut -y
             then
                 echo "Error during installing Shotcut."
+                echo "Installing Shotcut" >> failed.txt
                 return 1
         fi
         echo "Shotcut installation successful!"
@@ -320,6 +355,7 @@ function install_neofetch(){
         if ! sudo dnf install neofetch -y
             then
                 echo "Error during installing Neofetch."
+                echo "Installing Neofetch" >> failed.txt
                 return 1
         fi
         echo "Neofetch installation successful!"
@@ -331,6 +367,7 @@ function install_openrgb(){
         if ! sudo dnf install openrgb -y
             then
                 echo "Error during installing OpenRGB."
+                echo "Installing OpenRGB" >> failed.txt
                 return 1
         fi
         echo "OpenRGB installation successful!"
@@ -342,6 +379,7 @@ function install_mangohud(){
         if ! sudo dnf install mangohud -y
             then
                 echo "Error during installing MangoHud."
+                echo "Installing MangoHud" >> failed.txt
                 return 1
         fi
         echo "MangoHud installation successful!"
@@ -371,3 +409,7 @@ install_shotcut
 install_neofetch
 install_openrgb
 install_mangohud
+
+echo "Installation complete!"
+echo "Failed installations:"
+echo cat failed.txt
