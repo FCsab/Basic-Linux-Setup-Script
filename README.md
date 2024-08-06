@@ -10,7 +10,7 @@
         <li>Gimp</li>
         <li>Fish (doesnt change the shell)</li>
         <li>VS code</li>
-        <li>Rust</li>
+        <li>Kitty terminal</li>
         <li>Libre Office</li>
         <li>Obsidian</li>
         <li>Modrinth (minecraft modloader)</li>
@@ -21,6 +21,8 @@
         <li>Neofetch</li>
         <li>OpenRGB</li>
         <li>Mangohud</li>
+        <li>Gnome Extensions (if on Gnome)</li>
+        <li>Gnome Tweaks (if on Gnome)</li>
     </ul>
 
 <h2>Requirements</h2>

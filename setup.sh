@@ -494,6 +494,25 @@ function install_neofetch(){
     fi
 }
 
+function install_kitty(){
+    if [[ "$system" == "Fedora" ]]; then
+        if ! sudo dnf install kitty -y
+            then
+                echo "Installing Kitty" >> failed.txt
+                return 1
+        fi
+        echo "Kitty installation successful!"
+    fi
+    if [[ "$system" == "Debian" ]]; then
+        if ! sudo apt install kitty -y
+            then
+                echo "Installing Kitty" >> failed.txt
+                return 1
+        fi
+        echo "Kitty installation successful!"
+    fi
+}
+
 function install_openrgb(){
     if [[ "$system" == "Fedora" ]]; then
         if ! sudo dnf install openrgb -y
@@ -561,6 +580,30 @@ function update_system(){
     fi
 }
 
+function install_gnome_apps(){
+    if [[ "$XDG_CURRENT_DESKTOP" ~= "Gnome"]]; then
+        if ! flatpak install flathub com.mattjakeman.ExtensionManager -y
+            then
+                echo "Installing Gnome Extensions" >> failed.txt
+                return 1
+        fi
+        if [["$system" == "Fedora"]]; then
+            if ! sudo dnf install gnome-tweaks -y
+                then
+                    echo "Installing Gnome Tweaks" >> failed.txt
+                    return 1
+            fi
+        fi
+        if [["$system" == "Debian"]]; then
+            if ! sudo apt install gnome-tweaks -y
+                then
+                    echo "Installing Gnome Tweaks" >> failed.txt
+                    return 1
+            fi
+        fi
+    fi
+}
+
 update_system
 install_steam
 install_codecs
@@ -581,8 +624,10 @@ install_keepassxc
 install_transmission
 install_shotcut
 install_neofetch
+install_kitty
 install_openrgb
 install_mangohud
+install_gnome_apps
 update_system
 
 echo "Installation complete!"
