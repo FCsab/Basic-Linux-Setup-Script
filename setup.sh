@@ -114,33 +114,31 @@ function install_codecs(){
 function install_protonge(){
     username=$(logname)
     if [[ "$system" == "Fedora" ]] || [[ "$system" == "Debian" ]]; then
-            if ! wget -P /home/$username/Downloads https://github.com/GloriousEggroll/proton-ge-custom/releases/download/GE-Proton9-11/GE-Proton9-11.tar.gz
-            if ! mkdir /home/$username/.steam
-                then
+            if ! wget -P /home/$username/Downloads https://github.com/GloriousEggroll/proton-ge-custom/releases/download/GE-Proton9-11/GE-Proton9-11.tar.gz; then
+                echo "ProtonGe download" >> failed.txt
+                return 1
+            fi
+            if ! mkdir /home/$username/.steam; then
                     echo "ProtonGe folder creation" >> failed.txt
                     return 1
             fi
-            if ! mkdir /home/$username/.steam/root
-                then
+            if ! mkdir /home/$username/.steam/root; then
                     echo "ProtonGe folder creation" >> failed.txt
                     return 1
             fi
-            if ! mkdir /home/$username/.steam/root/compatibilitytools.d/
-                then
+            if ! mkdir /home/$username/.steam/root/compatibilitytools.d/; then
                     echo "ProtonGe folder creation" >> failed.txt
                     return 1
             fi
-            if ! tar -xf /home/$username/Downloads/GE-Proton9-11.tar.gz -C /home/$username/.steam/root/compatibilitytools.d/
-                then
+            if ! tar -xf /home/$username/Downloads/GE-Proton9-11.tar.gz -C /home/$username/.steam/root/compatibilitytools.d/; then
                     echo "ProtonGe extract" >> failed.txt
                     return 1
             fi
-            if ! rm /home/$username/Downloads/GE-Proton9-11.tar.gz
-                then
+            if ! rm /home/$username/Downloads/GE-Proton9-11.tar.gz; then
                     echo "ProtonGe clean" >> failed.txt
                     return 1
             fi
-            fi
+        fi
     fi
 }
 
