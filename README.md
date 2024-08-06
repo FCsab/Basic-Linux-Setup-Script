@@ -34,7 +34,7 @@
 
 <h2>Supported systems:</h2>
 <ul>
-    <li>Only Fedora for now, but im planning on adding Arch and Debian.</li>
+    <li>Fedora and Debian are currently supported, Arch support coming later.</li>
 </ul>
 
 <br>

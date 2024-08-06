@@ -1,9 +1,16 @@
 #!/bin/bash
+if [[ $EUID -ne 0 ]]; then
+    echo "This script must be run with sudo, use sudo bash setup.sh" exit 1
+fi
+
 if [[ $(dnf --version) ]];
     then system="Fedora"
 fi
+if [[ $(apt --version) ]];
+    then system="Debian"
+fi
 
-if [[ "$system" != "Fedora" ]]; then
+if [[ "$system" == "Fedora" ]] || [[ "$system" == "Debian" ]]; then
     echo "No support for you yet."
 fi
 
@@ -28,6 +35,23 @@ function install_steam(){
     fi
     echo "Steam installation successful!"
     fi
+
+
+    if [[ "$system" == "Debian" ]]; then
+        if ! sudo dpkg --add-architecture i386; then
+            echo "Adding i386 architecture" >> failed.txt
+            return 1
+        fi
+        if ! sudo apt update; then
+            echo "Updating apt" >> failed.txt
+            return 1
+        fi
+        if ! sudo apt install -y steam; then
+            echo "Installing Steam" >> failed.txt
+            return 1
+        fi
+        echo "Steam installation successful!"
+    fi
 }
 
 function post_install_setup(){
@@ -48,17 +72,6 @@ then
     return 1
 fi
 fi
-}
-
-function enable_bluetooth(){
-    if [[ "$system" == "Fedora" ]]; then
-        if ! sudo systemctl enable --now bluetooth
-            then
-                echo "Enabling bluetooth" >> failed.txt
-                return 1
-        fi
-        echo "Bluetooth enabled!"
-    fi
 }
 
 function install_codecs(){
@@ -93,7 +106,7 @@ function install_codecs(){
 }
 
 function install_protonge(){
-    if [[ "$system" == "Fedora" ]]; then
+    if [[ "$system" == "Fedora" ]] || [[ "$system" == "Debian" ]]; then
         mkdir ~/.steam/root/compatibilitytools.d
             if ! wget -P ~/Downloads https://github.com/GloriousEggroll/proton-ge-custom/releases/download/GE-Proton9-11/GE-Proton9-11.tar.gz
                 then
@@ -135,12 +148,26 @@ function install_git(){
                 echo "Installing git" >> failed.txt
                 return 1
         fi
-        if ! flatpak install flathub io.github.shiftey.Desktop
+        if ! flatpak install flathub io.github.shiftey.Desktop -y
             then
                 echo "Installing GitHub Desktop" >> failed.txt
                 return 1
         echo "Git installation successful!"
     fi
+    fi
+    if [[ "$system" == "Debian" ]]; then
+        if ! sudo apt install git -y
+            then
+                echo "Installing git" >> failed.txt
+                return 1
+        fi
+        if ! flatpak install flathub io.github.shiftey.Desktop -y
+            then
+                echo "Installing GitHub Desktop" >> failed.txt
+                return 1
+        echo "Git installation successful!"
+    fi
+        echo "Git installation successful!"
     fi
 }
 
@@ -163,6 +190,16 @@ function install_discord(){
         fi
         echo "Discord installation successful!"
     fi
+
+
+    if [[ "$system" == "Debian" ]]; then
+        if ! flatpak install flathub com.discordapp.Discord -y
+            then
+                echo "Installing discord" >> failed.txt
+                return 1
+        fi
+        echo "Discord installation successful!"
+    fi
 }
 
 function install_grubcostum(){
@@ -174,6 +211,24 @@ function install_grubcostum(){
         fi
         echo "Grub Customizer installation successful!"
     fi
+    if [[ "$system" == "Debian" ]]; then
+        if ! sudo add-apt-repository ppa:trebelnik-stefina/grub-customizer
+            then
+                echo "Adding grub customizer repo" >> failed.txt
+                return 1
+        fi
+        if ! sudo apt update
+            then
+                echo "Updating for Grub Customizer" >> failed.txt
+                return 1
+        fi
+        if ! sudo apt install grub-customizer -y
+            then
+                echo "Installing Grub Customizer" >> failed.txt
+                return 1
+        fi
+        echo "Grub Customizer installation successful!"
+    fi 
 }
 
 function install_gimp(){
@@ -185,11 +240,27 @@ function install_gimp(){
         fi
         echo "GIMP installation successful!"
     fi
+    if [[ "$system" == "Debian" ]]; then
+        if ! sudo apt install gimp -y
+            then
+                echo "Installing GIMP" >> failed.txt
+                return 1
+        fi
+        echo "GIMP installation successful!"
+    fi
 }
 
 function install_fish(){
     if [[ "$system" == "Fedora" ]]; then
         if ! sudo dnf install fish -y
+            then
+                echo "Installing Fish" >> failed.txt
+                return 1
+        fi
+        echo "Fish installation successful!"
+    fi
+    if [[ "$system" == "Debian" ]]; then
+        if ! sudo apt install fish -y
             then
                 echo "Installing Fish" >> failed.txt
                 return 1
@@ -218,22 +289,71 @@ echo -e "[code]\nname=Visual Studio Code\nbaseurl=https://packages.microsoft.com
         fi
         echo "Visual Studio Code installation successful!"
     fi
-}
 
-function install_rust(){
-    if [[ "$system" == "Fedora" ]]; then
-        if ! sudo dnf install rust -y
+
+    if [[ "$system" == "Debian" ]]; then
+        if ! sudo apt-get install wget gpg
             then
-                echo "Installing Rust" >> failed.txt
+                echo "Installing VS code dependencies" >> failed.txt
                 return 1
         fi
-        echo "Rust installation successful!"
+        if ! wget -qO- https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor > packages.microsoft.gpg
+            then
+                echo "Downloading key for Visual Studio Code" >> failed.txt
+                return 1
+        fi
+        if ! sudo install -D -o root -g root -m 644 packages.microsoft.gpg /etc/apt/keyrings/packages.microsoft.gpg
+            then
+                echo "Installing key for Visual Studio Code" >> failed.txt
+                return 1
+        fi
+        if ! echo "deb [arch=amd64,arm64,armhf signed-by=/etc/apt/keyrings/packages.microsoft.gpg] https://packages.microsoft.com/repos/code stable main" |sudo tee /etc/apt/sources.list.d/vscode.list > /dev/null
+            then
+                echo "Adding Visual Studio Code repo" >> failed.txt
+                return 1
+        fi
+        if ! rm -f packages.microsoft.gpg
+            then
+                echo "Cleaning up VS code" >> failed.txt
+                return 1
+        fi
+        if ! sudo apt install apt-transport-https
+            then
+                echo "Installing apt transport for Visual Studio Code" >> failed.txt
+                return 1
+        fi
+        if ! sudo apt update
+            then
+                echo "Updating for Visual Studio Code" >> failed.txt
+                return 1
+        fi
+        if ! sudo apt install code -y
+            then
+                echo "Installing Visual Studio Code" >> failed.txt
+                return 1
+        fi
+        echo "Visual Studio Code installation successful!"
     fi
 }
 
 function set_up_flatpak(){
     if [[ "$system" == "Fedora" ]]; then
         if ! sudo dnf install flatpak -y
+            then
+                echo "Installing Flatpak" >> failed.txt
+                return 1
+        fi
+        if ! flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
+            then
+                echo "Adding Flathub" >> failed.txt
+                return 1
+        fi
+        echo "Flatpak installation successful!"
+    fi
+
+
+    if [[ "$system" == "Debian" ]]; then
+        if ! sudo apt install flatpak -y
             then
                 echo "Installing Flatpak" >> failed.txt
                 return 1
@@ -256,10 +376,20 @@ function install_libre_office(){
         fi
         echo "Libre Office installation successful!"
     fi
+
+
+    if [[ "$system" == "Debian" ]]; then
+        if ! sudo apt install libreoffice -y
+            then
+                echo "Installing Libre Office" >> failed.txt
+                return 1
+        fi
+        echo "Libre Office installation successful!"
+    fi
 }
 
 function install_obsidian(){
-    if [[ "$system" == "Fedora" ]]; then
+    if [[ "$system" == "Fedora" ]] || [[ "$system" == "Debian" ]]; then
         if ! flatpak install flathub md.obsidian.Obsidian -y
             then
                 echo "Installing Obsidian" >> failed.txt
@@ -270,7 +400,7 @@ function install_obsidian(){
 }
 
 function install_modrinth(){
-    if [[ "$system" == "Fedora" ]]; then
+    if [[ "$system" == "Fedora" ]] || [[ "$system" == "Debian" ]]; then
         if ! flatpak install flathub com.modrinth.ModrinthApp -y
             then
                 echo "Installing Modrinth" >> failed.txt
@@ -289,11 +419,47 @@ function install_retroarch(){
         fi
         echo "Retroarch installation successful!"
     fi
+    if [[ "$system" == "Debian" ]]; then
+        if ! sudo add-apt-repository ppa:libretro/stable
+            then
+                echo "Adding retro arch repo" >> failed.txt
+                return 1
+        fi
+        if ! sudo apt-get update
+            then
+                echo "Updating for Retroarch" >> failed.txt
+                return 1
+        fi
+        if ! sudo apt-get install retroarch -y
+            then
+                echo "Installing Retroarch" >> failed.txt
+                return 1
+        fi
+        echo "Retroarch installation successful!"
+    fi
 }
 
 function install_keepassxc(){
     if [[ "$system" == "Fedora" ]]; then
         if ! sudo dnf install keepassxc -y
+            then
+                echo "Installing KeepassXC" >> failed.txt
+                return 1
+        fi
+        echo "KeepassXC installation successful!"
+    fi
+    if [[ "$system" == "Debian" ]]; then
+        if ! sudo add-apt-repository ppa:phoerious/keepassxc
+            then
+                echo "Installing KeepassXC repo" >> failed.txt
+                return 1
+        fi
+        if ! sudo apt update
+            then
+                echo "Updating for KeepassXC" >> failed.txt
+                return 1
+        fi
+        if ! sudo apt install keepassxc -y
             then
                 echo "Installing KeepassXC" >> failed.txt
                 return 1
@@ -311,10 +477,18 @@ function install_transmission(){
         fi
         echo "Transmission installation successful!"
     fi
+    if [[ "$system" == "Debian" ]]; then
+        if ! sudo apt install transmission -y
+            then
+                echo "Installing Transmission" >> failed.txt
+                return 1
+        fi
+        echo "Transmission installation successful!"
+    fi
 }
 
 function install_shotcut(){
-    if [[ "$system" == "Fedora" ]]; then
+    if [[ "$system" == "Fedora" ]] || [[ "$system" == "Debian" ]]; then
         if ! flatpak install flathub org.shotcut.Shotcut -y
             then
                 echo "Installing Shotcut" >> failed.txt
@@ -333,6 +507,14 @@ function install_neofetch(){
         fi
         echo "Neofetch installation successful!"
     fi
+    if [[ "$system" == "Debian" ]]; then
+        if ! sudo apt install neofetch -y
+            then
+                echo "Installing Neofetch" >> failed.txt
+                return 1
+        fi
+        echo "Neofetch installation successful!"
+    fi
 }
 
 function install_openrgb(){
@@ -344,11 +526,37 @@ function install_openrgb(){
         fi
         echo "OpenRGB installation successful!"
     fi
+    if [[ "$system" == "Debian" ]]; then
+        if ! sudo add-apt-repository ppa:thopiekar/openrgb
+            then
+                echo "Installing OpenRGB repo" >> failed.txt
+                return 1
+        fi
+        if ! sudo apt update
+            then
+                echo "Updating for OpenRGB" >> failed.txt
+                return 1
+        fi
+        if ! sudo apt install openrgb -y
+            then
+                echo "Installing OpenRGB" >> failed.txt
+                return 1
+        fi
+        echo "OpenRGB installation successful!"
+    fi
 }
 
 function install_mangohud(){
     if [[ "$system" == "Fedora" ]]; then
         if ! sudo dnf install mangohud -y
+            then
+                echo "Installing MangoHud" >> failed.txt
+                return 1
+        fi
+        echo "MangoHud installation successful!"
+    fi
+    if [[ "$system" == "Debian" ]]; then
+        if ! sudo apt install mangohud -y
             then
                 echo "Installing MangoHud" >> failed.txt
                 return 1
@@ -371,6 +579,19 @@ function update_system(){
         fi
         echo "System updated!"
     fi
+    if [[ "$system" == "Debian" ]]; then
+        if ! sudo apt update
+            then
+                echo "Updating system" >> failed.txt
+                return 1
+        fi
+        if ! sudo apt upgrade -y
+            then
+                echo "Upgrading system" >> failed.txt
+                return 1
+        fi
+        echo "System updated!"
+    fi
 }
 
 update_system
@@ -378,7 +599,6 @@ install_steam
 install_codecs
 set_up_flatpak
 install_git
-enable_bluetooth
 post_install_setup
 install_discord
 install_grubcostum
@@ -386,7 +606,6 @@ install_protonge
 install_gimp
 install_fish
 install_vscode
-install_rust
 install_libre_office
 install_obsidian
 install_modrinth
