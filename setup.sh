@@ -16,8 +16,7 @@ echo "$system detected on your computer."
 
 function install_steam(){
      if [[ "$system" == "Fedora" ]]; then
-        if ! sudo dnf install -y https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm https://mirrors.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$(rpm -E %fedora).noarch.rpm;
- then
+        if ! sudo dnf install -y https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm https://mirrors.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$(rpm -E %fedora).noarch.rpm; then
       echo "Downloading steam repo" >> failed.txt
       return 1
     fi
@@ -123,6 +122,10 @@ function install_protonge(){
                     echo "ProtonGe folder creation" >> failed.txt
                     return 1
             fi
+            if ! sudo chown -R $username:$username /home/$username/.steam; then
+            echo "ProtonGe folder ownership" >> failed.txt
+            return 1
+        fi
             if ! tar -xf /home/$username/Downloads/GE-Proton9-11.tar.gz -C /home/$username/.steam/root/compatibilitytools.d/; then
                     echo "ProtonGe extract" >> failed.txt
                     return 1
@@ -132,7 +135,6 @@ function install_protonge(){
                     return 1
             fi
         fi
-    fi
 }
 
 function install_git(){
@@ -565,9 +567,14 @@ install_gnome_apps
 update_system
 
 echo "Installation complete!"
-echo "Failed installations:"
-cat $directory/failed.txt
-rm $directory/failed.txt
+
+if [[ -f "$directory/failed.txt" ]]; then
+    echo "Failed installations:"
+    cat "$directory/failed.txt"
+    rm "$directory/failed.txt"
+else
+    echo "No failed installations."
+fi
 
 echo "Restart computer  to apply changes y/n?"
 read restart
