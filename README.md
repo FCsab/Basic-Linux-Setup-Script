@@ -39,6 +39,8 @@
 
 <br>
 
+<h2>On Debian there are false positives when writing out failed installations. Restart your system after install, they should appear.</h2>
+
 <h2>Usage:</h2>
 <h3>Download setup.sh</h3>
 

@@ -10,9 +10,7 @@ if [[ $(apt --version) ]];
     then system="Debian"
 fi
 
-if [[ "$system" == "Fedora" ]] || [[ "$system" == "Debian" ]]; then
-    echo "No support for you yet."
-fi
+directory=$(pwd)
 
 echo "$system detected on your computer."
 
@@ -114,34 +112,35 @@ function install_codecs(){
 }
 
 function install_protonge(){
+    username=$(logname)
     if [[ "$system" == "Fedora" ]] || [[ "$system" == "Debian" ]]; then
-        mkdir ~/.steam/root/compatibilitytools.d
-            if ! wget -P ~/Downloads https://github.com/GloriousEggroll/proton-ge-custom/releases/download/GE-Proton9-11/GE-Proton9-11.tar.gz
+        mkdir /home/$username/.steam/root/compatibilitytools.d
+            if ! wget -P /home/$username/Downloads https://github.com/GloriousEggroll/proton-ge-custom/releases/download/GE-Proton9-11/GE-Proton9-11.tar.gz
                 then
                     echo "Installing ProtonGe" >> failed.txt
                     return 1
             fi
-            if ! mkdir ~/.steam
+            if ! mkdir /home/$username/.steam
                 then
                     echo "ProtonGe folder creation" >> failed.txt
                     return 1
             fi
-            if ! mkdir ~/.steam/root
+            if ! mkdir /home/$username/.steam/root
                 then
                     echo "ProtonGe folder creation" >> failed.txt
                     return 1
             fi
-            if ! mkdir ~/.steam/root/compatibilitytools.d/
+            if ! mkdir /home/$username/.steam/root/compatibilitytools.d/
                 then
                     echo "ProtonGe folder creation" >> failed.txt
                     return 1
             fi
-            if ! tar -xf ~/Downloads/GE-Proton9-11.tar.gz -C ~/.steam/root/compatibilitytools.d/
+            if ! tar -xf /home/$username/Downloads/GE-Proton9-11.tar.gz -C ~/.steam/root/compatibilitytools.d/
                 then
                     echo "ProtonGe extract" >> failed.txt
                     return 1
             fi
-            if ! rm ~/Downloads/GE-Proton9-11.tar.gz
+            if ! rm /home/$username/Downloads/GE-Proton9-11.tar.gz
                 then
                     echo "ProtonGe clean" >> failed.txt
                     return 1
@@ -588,8 +587,8 @@ update_system
 
 echo "Installation complete!"
 echo "Failed installations:"
-cat failed.txt
-rm failed.txt
+cat $directory/failed.txt
+rm $directory/failed.txt
 
 echo "Restart computer  to apply changes y/n?"
 read restart
