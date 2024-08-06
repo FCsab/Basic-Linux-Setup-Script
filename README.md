@@ -46,20 +46,8 @@
 <br>
 
 <h2>Usage:</h2>
-<h3>Download setup.sh</h3>
+<h3>Single command</h3>
 
 ```bash
-wget https://raw.githubusercontent.com/FCsab/Basic-Linux-Setup-Script/main/setup.sh
-```
-
-<h3>Make file executeable</h3>
-
-```bash
-chmod +x setup.sh
-```
-
-<h3>Run the file as sudo</h3>
-
-```bash
-sudo bash setup.sh
+curl https://raw.githubusercontent.com/FCsab/Basic-Linux-Setup-Script/main/setup.sh >> setup.sh && chmod +x setup.sh && sudo bash setup.sh
 ```

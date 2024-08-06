@@ -114,12 +114,7 @@ function install_codecs(){
 function install_protonge(){
     username=$(logname)
     if [[ "$system" == "Fedora" ]] || [[ "$system" == "Debian" ]]; then
-        mkdir /home/$username/.steam/root/compatibilitytools.d
             if ! wget -P /home/$username/Downloads https://github.com/GloriousEggroll/proton-ge-custom/releases/download/GE-Proton9-11/GE-Proton9-11.tar.gz
-                then
-                    echo "Installing ProtonGe" >> failed.txt
-                    return 1
-            fi
             if ! mkdir /home/$username/.steam
                 then
                     echo "ProtonGe folder creation" >> failed.txt
@@ -135,7 +130,7 @@ function install_protonge(){
                     echo "ProtonGe folder creation" >> failed.txt
                     return 1
             fi
-            if ! tar -xf /home/$username/Downloads/GE-Proton9-11.tar.gz -C ~/.steam/root/compatibilitytools.d/
+            if ! tar -xf /home/$username/Downloads/GE-Proton9-11.tar.gz -C /home/$username/.steam/root/compatibilitytools.d/
                 then
                     echo "ProtonGe extract" >> failed.txt
                     return 1
@@ -144,6 +139,7 @@ function install_protonge(){
                 then
                     echo "ProtonGe clean" >> failed.txt
                     return 1
+            fi
             fi
     fi
 }
@@ -581,20 +577,20 @@ function update_system(){
 }
 
 function install_gnome_apps(){
-    if [[ "$XDG_CURRENT_DESKTOP" ~= "Gnome"]]; then
+    if [[ "$XDG_CURRENT_DESKTOP" =~ "Gnome" ]]; then
         if ! flatpak install flathub com.mattjakeman.ExtensionManager -y
             then
                 echo "Installing Gnome Extensions" >> failed.txt
                 return 1
         fi
-        if [["$system" == "Fedora"]]; then
+        if [[ "$system" == "Fedora" ]]; then
             if ! sudo dnf install gnome-tweaks -y
                 then
                     echo "Installing Gnome Tweaks" >> failed.txt
                     return 1
             fi
         fi
-        if [["$system" == "Debian"]]; then
+        if [[ "$system" == "Debian" ]]; then
             if ! sudo apt install gnome-tweaks -y
                 then
                     echo "Installing Gnome Tweaks" >> failed.txt
