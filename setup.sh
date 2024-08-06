@@ -35,19 +35,27 @@ function install_steam(){
     fi
     echo "Steam installation successful!"
     fi
-
+c
 
     if [[ "$system" == "Debian" ]]; then
+        if ! sudo echo "deb http://deb.debian.org/debian/ bookworm main contrib non-free" >> /etc/apt/sources.list; then
+            echo "Adding steam repo" >> failed.txt
+            return 1
+        fi
         if ! sudo dpkg --add-architecture i386; then
-            echo "Adding i386 architecture" >> failed.txt
+            echo "Updating apt" >> failed.txt
             return 1
         fi
         if ! sudo apt update; then
             echo "Updating apt" >> failed.txt
             return 1
         fi
-        if ! sudo apt install -y steam; then
+        if ! sudo apt install -y steam-installer; then
             echo "Installing Steam" >> failed.txt
+            return 1
+        fi
+        if ! apt install mesa-vulkan-drivers libglx-mesa0:i386 mesa-vulkan-drivers:i386 libgl1-mesa-dri:i386; then
+            echo "Installing Steam dependencies" >> failed.txt
             return 1
         fi
         echo "Steam installation successful!"
@@ -212,16 +220,6 @@ function install_grubcostum(){
         echo "Grub Customizer installation successful!"
     fi
     if [[ "$system" == "Debian" ]]; then
-        if ! sudo add-apt-repository ppa:trebelnik-stefina/grub-customizer
-            then
-                echo "Adding grub customizer repo" >> failed.txt
-                return 1
-        fi
-        if ! sudo apt update
-            then
-                echo "Updating for Grub Customizer" >> failed.txt
-                return 1
-        fi
         if ! sudo apt install grub-customizer -y
             then
                 echo "Installing Grub Customizer" >> failed.txt
@@ -420,16 +418,6 @@ function install_retroarch(){
         echo "Retroarch installation successful!"
     fi
     if [[ "$system" == "Debian" ]]; then
-        if ! sudo add-apt-repository ppa:libretro/stable
-            then
-                echo "Adding retro arch repo" >> failed.txt
-                return 1
-        fi
-        if ! sudo apt-get update
-            then
-                echo "Updating for Retroarch" >> failed.txt
-                return 1
-        fi
         if ! sudo apt-get install retroarch -y
             then
                 echo "Installing Retroarch" >> failed.txt
@@ -449,16 +437,6 @@ function install_keepassxc(){
         echo "KeepassXC installation successful!"
     fi
     if [[ "$system" == "Debian" ]]; then
-        if ! sudo add-apt-repository ppa:phoerious/keepassxc
-            then
-                echo "Installing KeepassXC repo" >> failed.txt
-                return 1
-        fi
-        if ! sudo apt update
-            then
-                echo "Updating for KeepassXC" >> failed.txt
-                return 1
-        fi
         if ! sudo apt install keepassxc -y
             then
                 echo "Installing KeepassXC" >> failed.txt
@@ -527,17 +505,7 @@ function install_openrgb(){
         echo "OpenRGB installation successful!"
     fi
     if [[ "$system" == "Debian" ]]; then
-        if ! sudo add-apt-repository ppa:thopiekar/openrgb
-            then
-                echo "Installing OpenRGB repo" >> failed.txt
-                return 1
-        fi
-        if ! sudo apt update
-            then
-                echo "Updating for OpenRGB" >> failed.txt
-                return 1
-        fi
-        if ! sudo apt install openrgb -y
+        if ! flatpak install flathub org.openrgb.OpenRGB -y
             then
                 echo "Installing OpenRGB" >> failed.txt
                 return 1
