@@ -33,7 +33,6 @@ function install_steam(){
     fi
     echo "Steam installation successful!"
     fi
-c
 
     if [[ "$system" == "Debian" ]]; then
         if ! sudo echo "deb http://deb.debian.org/debian/ bookworm main contrib non-free" >> /etc/apt/sources.list; then
@@ -71,8 +70,7 @@ best=False
 skip_if_unavailable=True
 fastestmirror=1
 max_parallel_downloads=10
-deltarpm=true" > /etc/dnf/dnf.conf
-then
+deltarpm=true" > /etc/dnf/dnf.conf; then
     echo "DNF config" >> failed.txt
     sudo cp /etc/dnf/dnf.conf.bak /etc/dnf/dnf.conf
     return 1
@@ -82,28 +80,23 @@ fi
 
 function install_codecs(){
     if [[ "$system" == "Fedora" ]]; then
-        if ! sudo dnf swap 'ffmpeg-free' 'ffmpeg' --allowerasing -y
-            then
+        if ! sudo dnf swap 'ffmpeg-free' 'ffmpeg' --allowerasing -y; then
                 echo "codecs" >> failed.txt
                 return 1
         fi
-        if ! sudo dnf update @multimedia --setopt="install_weak_deps=False" --exclude=PackageKit-gstreamer-plugin -y
-            then
+        if ! sudo dnf update @multimedia --setopt="install_weak_deps=False" --exclude=PackageKit-gstreamer-plugin -y; then
                 echo "codecs" >> failed.txt
                 return 1
         fi
-        if ! sudo dnf install ffmpeg ffmpeg-libs libva libva-utils -y
-            then
+        if ! sudo dnf install ffmpeg ffmpeg-libs libva libva-utils -y; then
                 echo "codecs" >> failed.txt
                 return 1
         fi
-        if ! sudo dnf config-manager --set-enabled fedora-cisco-openh264 -y
-            then
+        if ! sudo dnf config-manager --set-enabled fedora-cisco-openh264 -y; then
                 echo "codecs" >> failed.txt
                 return 1
         fi
-        if ! sudo dnf install -y openh264 gstreamer1-plugin-openh264 mozilla-openh264 -y
-            then
+        if ! sudo dnf install -y openh264 gstreamer1-plugin-openh264 mozilla-openh264 -y; then
                 echo "codecs" >> failed.txt
                 return 1
         fi
@@ -149,21 +142,18 @@ function install_git(){
                 echo "Installing git" >> failed.txt
                 return 1
         fi
-        if ! flatpak install flathub io.github.shiftey.Desktop -y
-            then
+        if ! flatpak install flathub io.github.shiftey.Desktop -y; then
                 echo "Installing GitHub Desktop" >> failed.txt
                 return 1
         echo "Git installation successful!"
     fi
     fi
     if [[ "$system" == "Debian" ]]; then
-        if ! sudo apt install git -y
-            then
+        if ! sudo apt install git -y; then
                 echo "Installing git" >> failed.txt
                 return 1
         fi
-        if ! flatpak install flathub io.github.shiftey.Desktop -y
-            then
+        if ! flatpak install flathub io.github.shiftey.Desktop -y; then
                 echo "Installing GitHub Desktop" >> failed.txt
                 return 1
         echo "Git installation successful!"
@@ -174,18 +164,15 @@ function install_git(){
 
 function install_discord(){
     if [[ "$system" == "Fedora" ]]; then
-        if ! sudo dnf install https://download1.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$(rpm -E %fedora).noarch.rpm
-            then
+        if ! sudo dnf install https://download1.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$(rpm -E %fedora).noarch.rpm; then
                 echo "Adding Discord repo" >> failed.txt
                 return 1
         fi
-        if ! sudo dnf update -y
-            then
+        if ! sudo dnf update -y; then
                 echo "Updating for Discord" >> failed.txt
                 return 1
         fi
-        if ! sudo dnf install discord -y
-            then
+        if ! sudo dnf install discord -y; then
                 echo "Installing Discord" >> failed.txt
                 return 1
         fi
@@ -194,8 +181,7 @@ function install_discord(){
 
 
     if [[ "$system" == "Debian" ]]; then
-        if ! flatpak install flathub com.discordapp.Discord -y
-            then
+        if ! flatpak install flathub com.discordapp.Discord -y; then
                 echo "Installing discord" >> failed.txt
                 return 1
         fi
@@ -205,8 +191,7 @@ function install_discord(){
 
 function install_grubcostum(){
     if [[ "$system" == "Fedora" ]]; then
-        if ! sudo dnf install grub-customizer -y
-            then
+        if ! sudo dnf install grub-customizer -y; then
                 echo "Installing Grub Customizer" >> failed.txt
                 return 1
         fi
@@ -224,16 +209,14 @@ function install_grubcostum(){
 
 function install_gimp(){
     if [[ "$system" == "Fedora" ]]; then
-        if ! sudo dnf install gimp -y
-            then
+        if ! sudo dnf install gimp -y; then
                 echo "Installing GIMP" >> failed.txt
                 return 1
         fi
         echo "GIMP installation successful!"
     fi
     if [[ "$system" == "Debian" ]]; then
-        if ! sudo apt install gimp -y
-            then
+        if ! sudo apt install gimp -y; then
                 echo "Installing GIMP" >> failed.txt
                 return 1
         fi
@@ -243,16 +226,14 @@ function install_gimp(){
 
 function install_fish(){
     if [[ "$system" == "Fedora" ]]; then
-        if ! sudo dnf install fish -y
-            then
+        if ! sudo dnf install fish -y; then
                 echo "Installing Fish" >> failed.txt
                 return 1
         fi
         echo "Fish installation successful!"
     fi
     if [[ "$system" == "Debian" ]]; then
-        if ! sudo apt install fish -y
-            then
+        if ! sudo apt install fish -y; then
                 echo "Installing Fish" >> failed.txt
                 return 1
         fi
@@ -263,18 +244,15 @@ function install_fish(){
 function install_vscode(){
     if [[ "$system" == "Fedora" ]]; then
         if ! sudo rpm --import https://packages.microsoft.com/keys/microsoft.asc
-echo -e "[code]\nname=Visual Studio Code\nbaseurl=https://packages.microsoft.com/yumrepos/vscode\nenabled=1\ngpgcheck=1\ngpgkey=https://packages.microsoft.com/keys/microsoft.asc" | sudo tee /etc/yum.repos.d/vscode.repo > /dev/null
-            then
+echo -e "[code]\nname=Visual Studio Code\nbaseurl=https://packages.microsoft.com/yumrepos/vscode\nenabled=1\ngpgcheck=1\ngpgkey=https://packages.microsoft.com/keys/microsoft.asc" | sudo tee /etc/yum.repos.d/vscode.repo > /dev/null; then
                 return 1
                 echo "Importing key for Visual Studio Code" >> failed.txt
         fi
-        if ! sudo dnf check-update
-            then
+        if ! sudo dnf check-update; then
                 echo "Checking for updates for Visual Studio Code" >> failed.txt
                 return 1
         fi
-        if ! sudo dnf install code -y
-            then
+        if ! sudo dnf install code -y; then
                 echo "Installing Visual Studio Code" >> failed.txt
                 return 1
         fi
@@ -283,43 +261,35 @@ echo -e "[code]\nname=Visual Studio Code\nbaseurl=https://packages.microsoft.com
 
 
     if [[ "$system" == "Debian" ]]; then
-        if ! sudo apt-get install wget gpg
-            then
+        if ! sudo apt-get install wget gpg; then
                 echo "Installing VS code dependencies" >> failed.txt
                 return 1
         fi
-        if ! wget -qO- https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor > packages.microsoft.gpg
-            then
+        if ! wget -qO- https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor > packages.microsoft.gpg; then
                 echo "Downloading key for Visual Studio Code" >> failed.txt
                 return 1
         fi
-        if ! sudo install -D -o root -g root -m 644 packages.microsoft.gpg /etc/apt/keyrings/packages.microsoft.gpg
-            then
+        if ! sudo install -D -o root -g root -m 644 packages.microsoft.gpg /etc/apt/keyrings/packages.microsoft.gpg; then
                 echo "Installing key for Visual Studio Code" >> failed.txt
                 return 1
         fi
-        if ! echo "deb [arch=amd64,arm64,armhf signed-by=/etc/apt/keyrings/packages.microsoft.gpg] https://packages.microsoft.com/repos/code stable main" |sudo tee /etc/apt/sources.list.d/vscode.list > /dev/null
-            then
+        if ! echo "deb [arch=amd64,arm64,armhf signed-by=/etc/apt/keyrings/packages.microsoft.gpg] https://packages.microsoft.com/repos/code stable main" |sudo tee /etc/apt/sources.list.d/vscode.list > /dev/null; then
                 echo "Adding Visual Studio Code repo" >> failed.txt
                 return 1
         fi
-        if ! rm -f packages.microsoft.gpg
-            then
+        if ! rm -f packages.microsoft.gpg; then
                 echo "Cleaning up VS code" >> failed.txt
                 return 1
         fi
-        if ! sudo apt install apt-transport-https
-            then
+        if ! sudo apt install apt-transport-https; then
                 echo "Installing apt transport for Visual Studio Code" >> failed.txt
                 return 1
         fi
-        if ! sudo apt update
-            then
+        if ! sudo apt update; then
                 echo "Updating for Visual Studio Code" >> failed.txt
                 return 1
         fi
-        if ! sudo apt install code -y
-            then
+        if ! sudo apt install code -y; then
                 echo "Installing Visual Studio Code" >> failed.txt
                 return 1
         fi
@@ -329,13 +299,11 @@ echo -e "[code]\nname=Visual Studio Code\nbaseurl=https://packages.microsoft.com
 
 function set_up_flatpak(){
     if [[ "$system" == "Fedora" ]]; then
-        if ! sudo dnf install flatpak -y
-            then
+        if ! sudo dnf install flatpak -y; then
                 echo "Installing Flatpak" >> failed.txt
                 return 1
         fi
-        if ! flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
-            then
+        if ! flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo; then
                 echo "Adding Flathub" >> failed.txt
                 return 1
         fi
@@ -344,13 +312,11 @@ function set_up_flatpak(){
 
 
     if [[ "$system" == "Debian" ]]; then
-        if ! sudo apt install flatpak -y
-            then
+        if ! sudo apt install flatpak -y; then
                 echo "Installing Flatpak" >> failed.txt
                 return 1
         fi
-        if ! flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
-            then
+        if ! flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo; then
                 echo "Adding Flathub" >> failed.txt
                 return 1
         fi
@@ -360,8 +326,7 @@ function set_up_flatpak(){
 
 function install_libre_office(){
     if [[ "$system" == "Fedora" ]]; then
-        if ! sudo dnf install libreoffice -y
-            then
+        if ! sudo dnf install libreoffice -y; then
                 echo "Installing Libre Office" >> failed.txt
                 return 1
         fi
@@ -370,8 +335,7 @@ function install_libre_office(){
 
 
     if [[ "$system" == "Debian" ]]; then
-        if ! sudo apt install libreoffice -y
-            then
+        if ! sudo apt install libreoffice -y; then
                 echo "Installing Libre Office" >> failed.txt
                 return 1
         fi
@@ -381,8 +345,7 @@ function install_libre_office(){
 
 function install_obsidian(){
     if [[ "$system" == "Fedora" ]] || [[ "$system" == "Debian" ]]; then
-        if ! flatpak install flathub md.obsidian.Obsidian -y
-            then
+        if ! flatpak install flathub md.obsidian.Obsidian -y; then
                 echo "Installing Obsidian" >> failed.txt
                 return 1
         fi
@@ -392,8 +355,7 @@ function install_obsidian(){
 
 function install_modrinth(){
     if [[ "$system" == "Fedora" ]] || [[ "$system" == "Debian" ]]; then
-        if ! flatpak install flathub com.modrinth.ModrinthApp -y
-            then
+        if ! flatpak install flathub com.modrinth.ModrinthApp -y; then
                 echo "Installing Modrinth" >> failed.txt
                 return 1
         fi
@@ -403,16 +365,14 @@ function install_modrinth(){
 
 function install_retroarch(){
     if [[ "$system" == "Fedora" ]]; then
-        if ! sudo dnf install retroarch -y
-            then
+        if ! sudo dnf install retroarch -y; then
                 echo "Installing Retroarch" >> failed.txt
                 return 1
         fi
         echo "Retroarch installation successful!"
     fi
     if [[ "$system" == "Debian" ]]; then
-        if ! sudo apt-get install retroarch -y
-            then
+        if ! sudo apt-get install retroarch -y; then
                 echo "Installing Retroarch" >> failed.txt
                 return 1
         fi
@@ -422,16 +382,14 @@ function install_retroarch(){
 
 function install_keepassxc(){
     if [[ "$system" == "Fedora" ]]; then
-        if ! sudo dnf install keepassxc -y
-            then
+        if ! sudo dnf install keepassxc -y; then
                 echo "Installing KeepassXC" >> failed.txt
                 return 1
         fi
         echo "KeepassXC installation successful!"
     fi
     if [[ "$system" == "Debian" ]]; then
-        if ! sudo apt install keepassxc -y
-            then
+        if ! sudo apt install keepassxc -y; then
                 echo "Installing KeepassXC" >> failed.txt
                 return 1
         fi
@@ -441,16 +399,14 @@ function install_keepassxc(){
 
 function install_transmission(){
     if [[ "$system" == "Fedora" ]]; then
-        if ! sudo dnf install transmission -y
-            then
+        if ! sudo dnf install transmission -y; then
                 echo "Installing Transmission" >> failed.txt
                 return 1
         fi
         echo "Transmission installation successful!"
     fi
     if [[ "$system" == "Debian" ]]; then
-        if ! sudo apt install transmission -y
-            then
+        if ! sudo apt install transmission -y; then
                 echo "Installing Transmission" >> failed.txt
                 return 1
         fi
@@ -460,8 +416,7 @@ function install_transmission(){
 
 function install_shotcut(){
     if [[ "$system" == "Fedora" ]] || [[ "$system" == "Debian" ]]; then
-        if ! flatpak install flathub org.shotcut.Shotcut -y
-            then
+        if ! flatpak install flathub org.shotcut.Shotcut -y; then
                 echo "Installing Shotcut" >> failed.txt
                 return 1
         fi
@@ -471,16 +426,14 @@ function install_shotcut(){
 
 function install_neofetch(){
     if [[ "$system" == "Fedora" ]]; then
-        if ! sudo dnf install neofetch -y
-            then
+        if ! sudo dnf install neofetch -y; then
                 echo "Installing Neofetch" >> failed.txt
                 return 1
         fi
         echo "Neofetch installation successful!"
     fi
     if [[ "$system" == "Debian" ]]; then
-        if ! sudo apt install neofetch -y
-            then
+        if ! sudo apt install neofetch -y; then
                 echo "Installing Neofetch" >> failed.txt
                 return 1
         fi
@@ -490,16 +443,14 @@ function install_neofetch(){
 
 function install_kitty(){
     if [[ "$system" == "Fedora" ]]; then
-        if ! sudo dnf install kitty -y
-            then
+        if ! sudo dnf install kitty -y; then
                 echo "Installing Kitty" >> failed.txt
                 return 1
         fi
         echo "Kitty installation successful!"
     fi
     if [[ "$system" == "Debian" ]]; then
-        if ! sudo apt install kitty -y
-            then
+        if ! sudo apt install kitty -y; then
                 echo "Installing Kitty" >> failed.txt
                 return 1
         fi
@@ -509,16 +460,14 @@ function install_kitty(){
 
 function install_openrgb(){
     if [[ "$system" == "Fedora" ]]; then
-        if ! sudo dnf install openrgb -y
-            then
+        if ! sudo dnf install openrgb -y; then
                 echo "Installing OpenRGB" >> failed.txt
                 return 1
         fi
         echo "OpenRGB installation successful!"
     fi
     if [[ "$system" == "Debian" ]]; then
-        if ! flatpak install flathub org.openrgb.OpenRGB -y
-            then
+        if ! flatpak install flathub org.openrgb.OpenRGB -y; then
                 echo "Installing OpenRGB" >> failed.txt
                 return 1
         fi
@@ -528,16 +477,14 @@ function install_openrgb(){
 
 function install_mangohud(){
     if [[ "$system" == "Fedora" ]]; then
-        if ! sudo dnf install mangohud -y
-            then
+        if ! sudo dnf install mangohud -y; then
                 echo "Installing MangoHud" >> failed.txt
                 return 1
         fi
         echo "MangoHud installation successful!"
     fi
     if [[ "$system" == "Debian" ]]; then
-        if ! sudo apt install mangohud -y
-            then
+        if ! sudo apt install mangohud -y; then
                 echo "Installing MangoHud" >> failed.txt
                 return 1
         fi
@@ -547,26 +494,22 @@ function install_mangohud(){
 
 function update_system(){
     if [[ "$system" == "Fedora" ]]; then
-        if ! sudo dnf update -y
-            then
+        if ! sudo dnf update -y; then
                 echo "Updating system" >> failed.txt
                 return 1
         fi
-        if ! sudo dnf upgrade -y
-            then
+        if ! sudo dnf upgrade -y; then
                 echo "Upgrading system" >> failed.txt
                 return 1
         fi
         echo "System updated!"
     fi
     if [[ "$system" == "Debian" ]]; then
-        if ! sudo apt update
-            then
+        if ! sudo apt update; then
                 echo "Updating system" >> failed.txt
                 return 1
         fi
-        if ! sudo apt upgrade -y
-            then
+        if ! sudo apt upgrade -y; then
                 echo "Upgrading system" >> failed.txt
                 return 1
         fi
@@ -576,21 +519,18 @@ function update_system(){
 
 function install_gnome_apps(){
     if [[ "$XDG_CURRENT_DESKTOP" =~ "Gnome" ]]; then
-        if ! flatpak install flathub com.mattjakeman.ExtensionManager -y
-            then
+        if ! flatpak install flathub com.mattjakeman.ExtensionManager -y; then
                 echo "Installing Gnome Extensions" >> failed.txt
                 return 1
         fi
         if [[ "$system" == "Fedora" ]]; then
-            if ! sudo dnf install gnome-tweaks -y
-                then
+            if ! sudo dnf install gnome-tweaks -y; then
                     echo "Installing Gnome Tweaks" >> failed.txt
                     return 1
             fi
         fi
         if [[ "$system" == "Debian" ]]; then
-            if ! sudo apt install gnome-tweaks -y
-                then
+            if ! sudo apt install gnome-tweaks -y; then
                     echo "Installing Gnome Tweaks" >> failed.txt
                     return 1
             fi
