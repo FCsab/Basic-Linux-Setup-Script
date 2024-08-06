@@ -43,7 +43,7 @@
 <h3>Download setup.sh</h3>
 
 ```bash
-wget https://github.com/FCsab/Basic-Linux-Setup-Script/setup.sh
+wget https://raw.githubusercontent.com/FCsab/Basic-Linux-Setup-Script/main/setup.sh
 ```
 
 <h3>Make file executeable</h3>
