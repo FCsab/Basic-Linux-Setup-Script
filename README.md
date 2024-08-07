@@ -1,30 +1,5 @@
 <h1>My basic setup for Linux.</h1>
 <br>
-<h2>This will install the following packages:</h2>
-    <ul>
-        <li>Media codecs</li>
-        <li>Steam</li>
-        <li>Discord</li>
-        <li>Grub-Customizer</li>
-        <li><a href="https://github.com/GloriousEggroll/proton-ge-custom">Proton-GE 9-11</a></li>
-        <li>Gimp</li>
-        <li>Fish (doesnt change the shell)</li>
-        <li>VS code</li>
-        <li>Kitty terminal</li>
-        <li>Libre Office</li>
-        <li>Obsidian</li>
-        <li>Modrinth (minecraft modloader)</li>
-        <li>Retro Arch</li>
-        <li>KeePassXC</li>
-        <li>Transmission</li>
-        <li>Shotcut</li>
-        <li>Neofetch</li>
-        <li>OpenRGB</li>
-        <li><a href="https://github.com/flightlessmango/MangoHud">MangoHud</a></li>
-        <li>Gnome Extensions (if on Gnome)</li>
-        <li>Gnome Tweaks (if on Gnome)</li>
-        <li><a href="https://github.com/volitank/nala">Nala package manager (if on Debian)</a></li>
-    </ul>
 
 <h2>
     Install selections:
