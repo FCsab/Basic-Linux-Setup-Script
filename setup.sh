@@ -23,6 +23,8 @@ function get_selecion(){
     read gaming
 }
 
+get_selecion
+
 if [[ $(dnf --version) ]];
     then system="Fedora"
 fi
