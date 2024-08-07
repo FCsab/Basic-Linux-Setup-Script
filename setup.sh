@@ -99,7 +99,7 @@ deltarpm=true" > /etc/dnf/dnf.conf; then
 fi
 fi
     if [[ "$system" == "Debian" ]]; then
-        ! sudo apt install nala -y; then
+        if ! sudo apt install nala -y; then
             echo "Installing Nala" >> failed.txt
             return 1
         fi
