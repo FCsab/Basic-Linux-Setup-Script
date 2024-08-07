@@ -6,7 +6,7 @@
         <li>Steam</li>
         <li>Discord</li>
         <li>Grub-Customizer</li>
-        <li>Proton-GE 9-11</li>
+        <li><a href="https://github.com/GloriousEggroll/proton-ge-custom">Proton-GE 9-11</a></li>
         <li>Gimp</li>
         <li>Fish (doesnt change the shell)</li>
         <li>VS code</li>
@@ -29,7 +29,7 @@
 <br>
 <ul>
     <li>sudo permission</li>
-    <li>wget</li>
+    <li>curl</li>
 </ul>
 
 <br>
