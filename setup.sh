@@ -23,8 +23,6 @@ function get_selecion(){
     read gaming
 }
 
-get_selecion
-
 if [[ $(dnf --version) ]];
     then system="Fedora"
 fi
@@ -35,6 +33,8 @@ fi
 directory=$(pwd)
 
 echo "$system detected on your computer."
+
+get_selecion
 
 function install_steam(){
      if [[ "$system" == "Fedora" ]]; then
@@ -130,40 +130,6 @@ function install_codecs(){
         fi
     echo "Codecs installation successful!"
     fi
-}
-
-function install_protonge(){
-    username=$(logname)
-    if [[ "$system" == "Fedora" ]] || [[ "$system" == "Debian" ]]; then
-            if ! wget -P /home/$username/Downloads https://github.com/GloriousEggroll/proton-ge-custom/releases/download/GE-Proton9-11/GE-Proton9-11.tar.gz; then
-                echo "ProtonGe download" >> failed.txt
-                return 1
-            fi
-            if ! mkdir /home/$username/.steam; then
-                    echo "ProtonGe folder creation" >> failed.txt
-                    return 1
-            fi
-            if ! mkdir /home/$username/.steam/root; then
-                    echo "ProtonGe folder creation" >> failed.txt
-                    return 1
-            fi
-            if ! mkdir /home/$username/.steam/root/compatibilitytools.d/; then
-                    echo "ProtonGe folder creation" >> failed.txt
-                    return 1
-            fi
-            if ! sudo chown -R $username:$username /home/$username/.steam; then
-            echo "ProtonGe folder ownership" >> failed.txt
-            return 1
-        fi
-            if ! tar -xf /home/$username/Downloads/GE-Proton9-11.tar.gz -C /home/$username/.steam/root/compatibilitytools.d/; then
-                    echo "ProtonGe extract" >> failed.txt
-                    return 1
-            fi
-            if ! rm /home/$username/Downloads/GE-Proton9-11.tar.gz; then
-                    echo "ProtonGe clean" >> failed.txt
-                    return 1
-            fi
-        fi
 }
 
 function install_git(){
@@ -595,7 +561,6 @@ fi
 
 if [[ "$gaming" == "y" ]]; then
     install_steam
-    install_protonge
     install_discord
     install_modrinth
     install_retroarch

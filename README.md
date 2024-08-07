@@ -35,7 +35,6 @@
 <h2>Gaming</h2>
 <ul>
     <li>Steam</li>
-    <li><a href="https://github.com/GloriousEggroll/proton-ge-custom">Proton-GE 9-11</a></li>
     <li>Discord</li>
     <li>Modrinth (Minecraft Modloader)</li>
     <li>Retro Arch emulator</li>
