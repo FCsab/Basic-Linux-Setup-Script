@@ -3,6 +3,26 @@ if [[ $EUID -ne 0 ]]; then
     echo "This script must be run with sudo, use sudo bash setup.sh" exit 1
 fi
 
+function get_selecion(){
+    echo "Would like to install all packages listed on GitHub? y/n"
+    read all
+    if [[ "$all" == "y" ]]; then
+        basic="y"
+        tools="y"
+        gaming="y"
+        return 0
+    fi
+
+    echo "Would you like to install the basic packages? y/n"
+    read basic
+
+    echo "Would you like to install the development packages? y/n"
+    read tools
+
+    echo "Would you like to install the gaming packages? y/n"
+    read gaming
+}
+
 if [[ $(dnf --version) ]];
     then system="Fedora"
 fi
@@ -71,10 +91,17 @@ fastestmirror=1
 max_parallel_downloads=10
 deltarpm=true" > /etc/dnf/dnf.conf; then
     echo "DNF config" >> failed.txt
-    sudo cp /etc/dnf/dnf.conf.bak /etc/dnf/dnf.conf
+    sudo rm /etc/dnf/dnf.conf
+    sudo mv /etc/dnf/dnf.conf.bak /etc/dnf/dnf.conf
     return 1
 fi
 fi
+    if [[ "$system" == "Debian" ]]; then
+        ! sudo apt install nala -y; then
+            echo "Installing Nala" >> failed.txt
+            return 1
+        fi
+    fi
 }
 
 function install_codecs(){
@@ -520,7 +547,7 @@ function update_system(){
 }
 
 function install_gnome_apps(){
-    if [[ "$XDG_CURRENT_DESKTOP" =~ "Gnome" ]]; then
+    if [[ "$XDG_CURRENT_DESKTOP" =~ "GNOME" ]]; then
         if ! flatpak install flathub com.mattjakeman.ExtensionManager -y; then
                 echo "Installing Gnome Extensions" >> failed.txt
                 return 1
@@ -541,37 +568,45 @@ function install_gnome_apps(){
 }
 
 update_system
-install_steam
-install_codecs
 set_up_flatpak
-install_git
-post_install_setup
-install_discord
-install_grubcostum
-install_protonge
-install_gimp
-install_fish
-install_vscode
-install_libre_office
-install_obsidian
-install_modrinth
-install_retroarch
-install_keepassxc
-install_transmission
-install_shotcut
-install_neofetch
-install_kitty
-install_openrgb
-install_mangohud
-install_gnome_apps
-update_system
+
+if [[ "$basic" == "y" ]]; then
+    install_codecs
+    install_git
+    post_install_setup
+    install_gnome_apps
+fi
+
+if [[ "$tools" == "y" ]]; then
+    install_gimp
+    install_grubcostum
+    install_fish
+    install_vscode
+    install_libre_office
+    install_obsidian
+    install_keepassxc
+    install_transmission
+    install_shotcut
+    install_neofetch
+    install_kitty
+fi
+
+if [[ "$gaming" == "y" ]]; then
+    install_steam
+    install_protonge
+    install_discord
+    install_modrinth
+    install_retroarch
+    install_openrgb
+    install_mangohud
+fi
 
 echo "Installation complete!"
 
 if [[ -f "$directory/failed.txt" ]]; then
     echo "Failed installations:"
     cat "$directory/failed.txt"
-    rm "$directory/failed.txt"
+    rm "$directory/failed.txt"b
 else
     echo "No failed installations."
 fi
